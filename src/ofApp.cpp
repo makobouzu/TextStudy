@@ -2,8 +2,8 @@
 
 
 inline string randomString(int size){
-    const string randomWord = "abcdefghijklmnopqrstuvwxyz1234567890!?#/$%&|*+-_";
-    int rand = 37;
+    const string randomWord = "abcdefghijklmnopqrstuvwxyz1234567890!?#/$%&|*+-_{}[]~¥=()";
+    int rand = 46;
     string randomText;
     for(auto i = 0; i < size; ++i){
         char randomSelect = randomWord[ofRandom(rand)];
@@ -11,6 +11,7 @@ inline string randomString(int size){
     }
     return randomText;
 }
+
 
 //--------------------------------------------------------------
 void ofApp::setup(){
@@ -38,7 +39,20 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
     ofSetColor(255);
+    
+    //random effect
     font.drawString(output, 100, 100);
+    
+    //typing effect
+    if(number == 0){
+        return;
+    }else{
+        ofRectangle r = font.getStringBoundingBox(input.substr(number, 1), 100+ font.stringWidth(input.substr(0, number)), 200);
+        ofDrawRectangle(r);
+    }
+    font.drawString(input.substr(0, number), 100, 200);
+
+        
 }
 
 //--------------------------------------------------------------
@@ -56,5 +70,5 @@ void ofApp::keyPressed(int key){
 }
 
 void ofApp::startTweening(){
-    timeline().apply(&number).then<choreograph::RampTo>(int(input.size()), 1.0f, choreograph::EaseOutQuad());
+    timeline().apply(&number).then<choreograph::RampTo>(int(input.size()), 3.0f, choreograph::EaseInQuart());
 }
