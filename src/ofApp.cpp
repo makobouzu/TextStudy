@@ -26,9 +26,9 @@ void ofApp::setup(){
     
     //shader settings
     shader.load("shader.vert", "shader.frag");
-    textBox = font.getStringBoundingBox(input, pos3.x - 10, pos3.y - 10);
-    textBox.setWidth(textBox.getWidth() + 20);
-    textBox.setHeight(textBox.getHeight() + 20);
+    textBox = font.getStringBoundingBox(input, pos3.x - textBoxMargin, pos3.y - textBoxMargin);
+    textBox.setWidth(textBox.getWidth() + textBoxMargin*2);
+    textBox.setHeight(textBox.getHeight() + textBoxMargin*2);
     ypos = textBox.getHeight();
     
     //timeline
@@ -52,17 +52,33 @@ void ofApp::draw(){
     font.drawString(output, pos1.x, pos1.y);
     
     
-    //typing effect
-    ofRectangle r = ofRectangle(pos2.x + font.stringWidth(input.substr(0, number)), pos2.y, typingBox.x, typingBox.y);
+    //typing box effect
+    ofRectangle b = ofRectangle(pos2.x + font.stringWidth(input.substr(0, number)) + margin, pos2.y, typingBox.x, typingBox.y);
     if(number == 0 || number == input.size()){
-        r.setWidth(0);
-        r.setHeight(0);
+        b.setWidth(0);
+        b.setHeight(0);
     }else{
-        r.setWidth(typingBox.x);
-        r.setHeight(typingBox.y);
+        b.setWidth(typingBox.x);
+        b.setHeight(typingBox.y);
     }
-    ofDrawRectangle(r);
+    ofDrawRectangle(b);
     font.drawString(input.substr(0, number), pos2.x, pos2.y);
+    
+    
+    //typing text effect
+    ofPushStyle();
+    ofRectangle t = ofRectangle(pos3.x + font.stringWidth(input.substr(0, number)) + margin, pos3.y, typingText.x, typingText.y);
+    if(number == input.size()){
+        t.setWidth(0);
+        t.setHeight(0);
+    }else{
+        t.setWidth(typingText.x);
+        t.setHeight(typingText.y);
+    }
+    ofSetColor(255, 255 * cos(10 * ofGetElapsedTimef()));
+    ofDrawRectangle(t);
+    ofPopStyle();
+    font.drawString(input.substr(0, number), pos3.x, pos3.y);
     
     
     //popup effect
@@ -70,8 +86,9 @@ void ofApp::draw(){
     ofSetColor(255);
     shader.setUniform1f("u_animation", ypos);
     shader.setUniform1f("u_textbox_height", textBox.getHeight());
-    font.drawStringAsShapes(input, pos3.x, pos3.y);
+    font.drawStringAsShapes(input, pos4.x, pos4.y);
     shader.end();
+    
 }
 
 //--------------------------------------------------------------
@@ -90,6 +107,6 @@ void ofApp::keyPressed(int key){
 }
 
 void ofApp::startTweening(){
-    timeline().apply(&number).then<choreograph::RampTo>(int(input.size()), 1.0f, choreograph::EaseInQuart());
-    timeline().apply(&ypos).then<choreograph::RampTo>(0.0f, 1.0f, choreograph::EaseInOutQuart());
+    timeline().apply(&number).then<choreograph::RampTo>(int(input.size()), 2.0f, choreograph::EaseInQuart());
+    timeline().apply(&ypos).then<choreograph::RampTo>(0.0f, 2.0f, choreograph::EaseInOutQuart());
 }

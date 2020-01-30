@@ -22,8 +22,13 @@ private:
     glm::vec2 pos1 = {100, 100};
     glm::vec2 pos2 = {100, 200};
     glm::vec2 pos3 = {100, 300};
+    glm::vec2 pos4 = {100, 400};
     
     glm::vec2 typingBox = {30, -45};
+    glm::vec2 typingText = {2, -45};
+    
+    int textBoxMargin = 10;
+    int margin = 5;
     
     ofShader shader;
     ofRectangle textBox;
