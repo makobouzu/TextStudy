@@ -26,7 +26,6 @@ void ofApp::setup(){
     
     //shader settings
     shader.load("shader.vert", "shader.frag");
-    //margin (-10, -10, 10, 10)
     textBox = font.getStringBoundingBox(input, pos3.x - 10, pos3.y - 10);
     textBox.setWidth(textBox.getWidth() + 20);
     textBox.setHeight(textBox.getHeight() + 20);
@@ -54,16 +53,17 @@ void ofApp::draw(){
     
     
     //typing effect
-    ofRectangle r = ofRectangle(pos2.x + font.stringWidth(input.substr(0, number)), pos2.y, 20, -45);
+    ofRectangle r = ofRectangle(pos2.x + font.stringWidth(input.substr(0, number)), pos2.y, typingBox.x, typingBox.y);
     if(number == 0 || number == input.size()){
         r.setWidth(0);
         r.setHeight(0);
     }else{
-        r.setWidth(20);
-        r.setHeight(-45);
+        r.setWidth(typingBox.x);
+        r.setHeight(typingBox.y);
     }
     ofDrawRectangle(r);
     font.drawString(input.substr(0, number), pos2.x, pos2.y);
+    
     
     //popup effect
     shader.begin();
@@ -90,6 +90,6 @@ void ofApp::keyPressed(int key){
 }
 
 void ofApp::startTweening(){
-    timeline().apply(&number).then<choreograph::RampTo>(int(input.size()), 3.0f, choreograph::EaseInQuart());
-    timeline().apply(&ypos).then<choreograph::RampTo>(0.0f, 3.0f, choreograph::EaseInOutQuart());
+    timeline().apply(&number).then<choreograph::RampTo>(int(input.size()), 1.0f, choreograph::EaseInQuart());
+    timeline().apply(&ypos).then<choreograph::RampTo>(0.0f, 1.0f, choreograph::EaseInOutQuart());
 }

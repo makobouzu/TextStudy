@@ -23,6 +23,8 @@ private:
     glm::vec2 pos2 = {100, 200};
     glm::vec2 pos3 = {100, 300};
     
+    glm::vec2 typingBox = {30, -45};
+    
     ofShader shader;
     ofRectangle textBox;
     
