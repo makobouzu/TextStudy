@@ -54,12 +54,15 @@ void ofApp::draw(){
     
     
     //typing effect
-    if(number == 0){
-        return;
+    ofRectangle r = ofRectangle(pos2.x + font.stringWidth(input.substr(0, number)), pos2.y, 20, -45);
+    if(number == 0 || number == input.size()){
+        r.setWidth(0);
+        r.setHeight(0);
     }else{
-        ofRectangle r = font.getStringBoundingBox(input.substr(number, 1), pos2.x + font.stringWidth(input.substr(0, number)), pos2.y);
-        ofDrawRectangle(r);
+        r.setWidth(20);
+        r.setHeight(-45);
     }
+    ofDrawRectangle(r);
     font.drawString(input.substr(0, number), pos2.x, pos2.y);
     
     //popup effect
