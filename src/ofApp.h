@@ -16,11 +16,19 @@ public:
 private:
     ofTrueTypeFont font;
     
-    std::string input  = "hello world";
+    std::string input  = "Hello World";
     std::string output = ""; //output = input + randomString(n)
+    
+    glm::vec2 pos1 = {100, 100};
+    glm::vec2 pos2 = {100, 200};
+    glm::vec2 pos3 = {100, 300};
+    
+    ofShader shader;
+    ofRectangle textBox;
     
 
     bool s = false;
     choreograph::Timeline&     timeline(){ return *timeline_;}
     choreograph::Output<int>   number;
+    choreograph::Output<float>   ypos;
 };

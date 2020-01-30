@@ -20,9 +20,17 @@ void ofApp::setup(){
     
     //text settings
     ofTrueTypeFont::setGlobalDpi(72);
-    font.load("/System/Library/Fonts/Helvetica.ttc", 60);
+    font.load("/System/Library/Fonts/Helvetica.ttc", 60, true, true, true);
     font.setLineHeight(24);
     font.setLetterSpacing(1.0);
+    
+    //shader settings
+    shader.load("shader.vert", "shader.frag");
+    //margin (-10, -10, 10, 10)
+    textBox = font.getStringBoundingBox(input, pos3.x - 10, pos3.y - 10);
+    textBox.setWidth(textBox.getWidth() + 20);
+    textBox.setHeight(textBox.getHeight() + 20);
+    ypos = textBox.getHeight();
     
     //timeline
     timeline_ = make_shared<choreograph::Timeline>();
@@ -40,19 +48,27 @@ void ofApp::update(){
 void ofApp::draw(){
     ofSetColor(255);
     
+    
     //random effect
-    font.drawString(output, 100, 100);
+    font.drawString(output, pos1.x, pos1.y);
+    
     
     //typing effect
     if(number == 0){
         return;
     }else{
-        ofRectangle r = font.getStringBoundingBox(input.substr(number, 1), 100+ font.stringWidth(input.substr(0, number)), 200);
+        ofRectangle r = font.getStringBoundingBox(input.substr(number, 1), pos2.x + font.stringWidth(input.substr(0, number)), pos2.y);
         ofDrawRectangle(r);
     }
-    font.drawString(input.substr(0, number), 100, 200);
-
-        
+    font.drawString(input.substr(0, number), pos2.x, pos2.y);
+    
+    //popup effect
+    shader.begin();
+    ofSetColor(255);
+    shader.setUniform1f("u_animation", ypos);
+    shader.setUniform1f("u_textbox_height", textBox.getHeight());
+    font.drawStringAsShapes(input, pos3.x, pos3.y);
+    shader.end();
 }
 
 //--------------------------------------------------------------
@@ -66,9 +82,11 @@ void ofApp::keyPressed(int key){
         output = "";
         number = 0;
         s = false;
+        ypos = textBox.getHeight();
     }
 }
 
 void ofApp::startTweening(){
     timeline().apply(&number).then<choreograph::RampTo>(int(input.size()), 3.0f, choreograph::EaseInQuart());
+    timeline().apply(&ypos).then<choreograph::RampTo>(0.0f, 3.0f, choreograph::EaseInOutQuart());
 }
