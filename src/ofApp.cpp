@@ -3,7 +3,7 @@
 
 inline string randomString(int size){
     const string randomWord = "abcdefghijklmnopqrstuvwxyz1234567890!?#/$%&|*+-_{}[]~¥=()";
-    int rand = 46;
+    int rand = int(randomWord.size());
     string randomText;
     for(auto i = 0; i < size; ++i){
         char randomSelect = randomWord[ofRandom(rand)];
@@ -107,6 +107,6 @@ void ofApp::keyPressed(int key){
 }
 
 void ofApp::startTweening(){
-    timeline().apply(&number).then<choreograph::RampTo>(int(input.size()), 2.0f, choreograph::EaseInQuart());
-    timeline().apply(&ypos).then<choreograph::RampTo>(0.0f, 2.0f, choreograph::EaseInOutQuart());
+    timeline().apply(&number).then<choreograph::RampTo>(int(input.size()), 0.4f, choreograph::EaseInQuart());
+    timeline().apply(&ypos).then<choreograph::RampTo>(0.0f, 0.4f, choreograph::EaseInOutQuart());
 }
